@@ -3,12 +3,17 @@ from PIL import ImageFont, ImageDraw, Image
 import numpy as np
 import pandas as pd
 
-template = cv2.imread("template/ygcf_template.jpg")
+#configurations
+template_path="template/ygcf_template.jpg"
+input_data_path='csv_data/ygcf.csv'
+result_path="result"
+
+template = cv2.imread(template_path)
 
 h = template.shape[0]
 w = template.shape[1]
 
-df = pd.read_csv('csv_data/ygcf.csv',encoding='utf-8')
+df = pd.read_csv(input_data_path,encoding='utf-8')
 print(df.head())
 
 print(df['status'].unique())
@@ -54,7 +59,7 @@ for i in range (0,len(df)):
     draw.text(((w)/5-120, 4.25*h/5+120), msg+" "  , font = font, fill = (0,0,0,0))
 
     res = np.array(img_pil)
-    cv2.imwrite("result/msg"+str(i)+".jpg", res)
+    cv2.imwrite(result_path+"/file"+str(i).zfill(3)+".jpg", res)
     # cv2.imwrite("test.jpg",res)
     # break
 # cv2.imshow("test",res)
