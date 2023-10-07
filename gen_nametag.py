@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 
 #configurations
-template_path="template/ygcf_template.jpg"
-input_data_path='csv_data/ygcf.csv'
+template_path="template/member.jpg"
+input_data_path='csv_data/yfc_test.csv'
 result_path="result"
 
 template = cv2.imread(template_path)
@@ -13,10 +13,19 @@ template = cv2.imread(template_path)
 h = template.shape[0]
 w = template.shape[1]
 
+def printToText(draw,msg,font,center_x,center_y):
+    dimension = font.getbbox(msg)
+    text_w = dimension[2]-dimension[0]
+    text_h = dimension[3]-dimension[1]
+    print(text_w,text_h)
+    draw.text(
+        (center_x-(text_w/2), center_y-(text_h/2)),
+        msg+" " ,align="center",
+        font = font,
+        fill = (0,0,0,0))
+
 df = pd.read_csv(input_data_path,encoding='utf-8')
 print(df.head())
-
-print(df['status'].unique())
 
 for i in range (0,len(df)):
     print(i)
@@ -27,39 +36,53 @@ for i in range (0,len(df)):
 
     img_pil = Image.fromarray(img)
     draw = ImageDraw.Draw(img_pil)
+    printToText(draw,df['nickname'][i],font,w/2,500)
     #name
-    msg = df['name'][i]
-    text_w, text_h = draw.textsize(msg,font=font)
-    draw.text(((w-text_w)/2, (h-text_h)/3+50), msg+" " , font = font, fill = (0,0,0,0))
+    # msg = df['nickname'][i]
+    # dimension = font.getbbox(msg)
+    # text_w = dimension[2]-dimension[0]
+    # text_h = dimension[3]-dimension[1]
+    # print(text_w,text_h)
+    # draw.text(((w-text_w)/2, (h-text_h)/3-60), msg+" " , font = font, fill = (0,0,0,0))
 
-    #position
-    msg = str(df['position'][i])
-    msg2 = ""
-    # fontpath = "Mitr/Mitr-SemiBold.ttf"
+    # #fullname
+    msg = str(df['fullname'][i])
+    # # fontpath = "Mitr/Mitr-SemiBold.ttf"
+    font = ImageFont.truetype(fontpath, 60)
+    printToText(draw,msg,font,w/3,1080)
+    #draw.text(((w)/5-120, 3*h/4-300), msg  , font = font, fill = (0,0,0,0))
+    
+    # #y_id
+    msg = str(df['y_id'][i])
+    font = ImageFont.truetype(fontpath, 60)
+    printToText(draw,msg,font,w*2/3+120,1070)
+    # draw.text((4*(w)/5-160, 3*h/4-300), msg+" "  , font = font, fill = (0,0,0,0))
+
+
+    # #church
+    msg = str(df['church'][i])
+    font = ImageFont.truetype(fontpath, 60)
+    printToText(draw,msg,font,w/3+10,1340)
+    # text_w, text_h = draw.textsize(msg,font=font)
+    # draw.text(((w)/5-120, 4.25*h/5-220), msg+" "  , font = font, fill = (0,0,0,0))
+
+    # #workshop_1
+    msg = str(df['workshop_1'][i])
     font = ImageFont.truetype(fontpath, 40)
-    text_w, text_h = draw.textsize(msg,font=font)
-    # print(text_w)
-    if text_w > 480:
-        msg_list = msg.split(" ",1)
-        msg = msg_list[0]
-        msg2 = msg_list[1]
-    draw.text(((w)/5-120, 3*h/4-200), msg+" "  , font = font, fill = (0,0,0,0))
-    draw.text(((w)/5-120, 3*h/4-200+text_h+50), msg2+" "  , font = font, fill = (0,0,0,0))
+    printToText(draw,msg,font,w/4+30,1620)
+    # text_w, text_h = draw.textsize(msg,font=font)
+    # draw.text(((w)/5-120, 4.25*h/5+65), msg+" "  , font = font, fill = (0,0,0,0))
 
-
-    #relation
-    msg = str(df['status'][i])
-    font = ImageFont.truetype(fontpath, 45)
-    text_w, text_h = draw.textsize(msg,font=font)
-    draw.text(((w)/5-120, 4.25*h/5-120), msg+" "  , font = font, fill = (0,0,0,0))
-    #group-room
-    msg = str(df['group'][i])+"/"+str(df['room'][i])
-    font = ImageFont.truetype(fontpath, 50)
-    text_w, text_h = draw.textsize(msg,font=font)
-    draw.text(((w)/5-120, 4.25*h/5+120), msg+" "  , font = font, fill = (0,0,0,0))
+    # #workshop_2
+    msg = str(df['workshop_2'][i])
+    font = ImageFont.truetype(fontpath, 40)
+    printToText(draw,msg,font,w*3/4-30,1620)
+    # text_w, text_h = draw.textsize(msg,font=font)
+    # draw.text((4*(w)/5-310, 4.25*h/5+65), msg+" "  , font = font, fill = (0,0,0,0))
 
     res = np.array(img_pil)
     cv2.imwrite(result_path+"/file"+str(i).zfill(3)+".jpg", res)
+    
     # cv2.imwrite("test.jpg",res)
     # break
 # cv2.imshow("test",res)

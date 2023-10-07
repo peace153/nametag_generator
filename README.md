@@ -33,3 +33,6 @@ python3 gen_nametag.py
 
 ### todo
 - put file location as a config file or variable on top of code for editing purpose.
+
+### legacy
+1.0 - PIL obsolete function draw.textsize, we must switch to use font.getbbox(msg) instead.
