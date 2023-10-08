@@ -13,16 +13,23 @@ template = cv2.imread(template_path)
 h = template.shape[0]
 w = template.shape[1]
 
-def printToText(draw,msg,font,center_x,center_y):
+def printToText(draw,msg,font,target_x,target_y,align="center"):
     dimension = font.getbbox(msg)
     text_w = dimension[2]-dimension[0]
     text_h = dimension[3]-dimension[1]
-    print(text_w,text_h)
-    draw.text(
-        (center_x-(text_w/2), center_y-(text_h/2)),
-        msg+" " ,align="center",
-        font = font,
-        fill = (0,0,0,0))
+    # print(text_w,text_h)
+    if align=="center":
+        draw.text(
+            (target_x-(text_w/2), target_y-(text_h/2)),
+            msg+" " ,align="center",
+            font = font,
+            fill = (0,0,0,0))
+    else :
+        draw.text(
+            (target_x, target_y),
+            msg+" " ,align=align,
+            font = font,
+            fill = (0,0,0,0))
 
 df = pd.read_csv(input_data_path,encoding='utf-8')
 print(df.head())
