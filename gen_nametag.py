@@ -13,7 +13,7 @@ template = cv2.imread(template_path)
 h = template.shape[0]
 w = template.shape[1]
 
-def printToText(draw,msg,font,target_x,target_y,align="center"):
+def printToText(draw,msg,font,target_x,target_y,align="center",color=(0,0,0,0)):
     dimension = font.getbbox(msg)
     text_w = dimension[2]-dimension[0]
     text_h = dimension[3]-dimension[1]
@@ -23,13 +23,13 @@ def printToText(draw,msg,font,target_x,target_y,align="center"):
             (target_x-(text_w/2), target_y-(text_h/2)),
             msg+" " ,align="center",
             font = font,
-            fill = (0,0,0,0))
+            fill = color)
     else :
         draw.text(
             (target_x, target_y),
             msg+" " ,align=align,
             font = font,
-            fill = (0,0,0,0))
+            fill = color)
 
 df = pd.read_csv(input_data_path,encoding='utf-8')
 print(df.head())
@@ -43,7 +43,7 @@ for i in range (0,len(df)):
 
     img_pil = Image.fromarray(img)
     draw = ImageDraw.Draw(img_pil)
-    printToText(draw,df['nickname'][i],font,w/2,500)
+    printToText(draw,df['nickname'][i],font,w/2,550,color=(100,100,0,0))
     #name
     # msg = df['nickname'][i]
     # dimension = font.getbbox(msg)
@@ -56,7 +56,8 @@ for i in range (0,len(df)):
     msg = str(df['fullname'][i])
     # # fontpath = "Mitr/Mitr-SemiBold.ttf"
     font = ImageFont.truetype(fontpath, 60)
-    printToText(draw,msg,font,w/3,1080)
+    #printToText(draw,msg,font,w/3,1080)
+    printToText(draw,msg,font,130,1050,align="left")
     #draw.text(((w)/5-120, 3*h/4-300), msg  , font = font, fill = (0,0,0,0))
     
     # #y_id
